@@ -624,14 +624,27 @@ static void I2C_MasterHandleRXNEInterrupt(I2C_Handle_t *pI2CHandle )
 	{
 		if(pI2CHandle->RxLen == 2)
 		{
+			// wait until  BTF becomes 1
+			while(! I2C_GetSR1FlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_BTF));
+
 			//clear the ack bit
 			I2C_ManageAcking(pI2CHandle->pI2Cx,DISABLE);
-		}
 
+
+			//read DR twice
+			*pI2CHandle->pRxBuffer = pI2CHandle->pI2Cx->DR;
+			pI2CHandle->pRxBuffer++;
+			pI2CHandle->RxLen--;
+			*pI2CHandle->pRxBuffer = pI2CHandle->pI2Cx->DR;
+			pI2CHandle->RxLen--;
+		}
+		else if(pI2CHandle->RxLen > 2)
+		{
 			//read DR
 			*pI2CHandle->pRxBuffer = pI2CHandle->pI2Cx->DR;
 			pI2CHandle->pRxBuffer++;
 			pI2CHandle->RxLen--;
+		}
 	}
 
 	if(pI2CHandle->RxLen == 0 )
