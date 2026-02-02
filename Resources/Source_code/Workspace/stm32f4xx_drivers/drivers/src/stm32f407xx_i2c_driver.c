@@ -108,13 +108,13 @@ static void I2C_ClearADDRFlag(I2C_Handle_t *pI2CHandle )
 /*********************************************************************
  * @fn      		  - I2C_PeripheralControl
  *
- * @brief             -
+ * @brief             - To enable the Peripheral I2C on the RCC Registers
  *
- * @param[in]         -
- * @param[in]         -
+ * @param[in]         - The regdef definition sytructure for the i2C Register 
+ * @param[in]         - Enable or disable Control for the periphreal
  * @param[in]         -
  *
- * @return            -
+ * @return            - Does not return anything
  *
  * @Note              -
 
@@ -136,10 +136,10 @@ void I2C_PeripheralControl(I2C_RegDef_t *pI2Cx, uint8_t EnOrDi)
 /*********************************************************************
  * @fn      		  - I2C_PeriClockControl
  *
- * @brief             -
+ * @brief             - This funciton enables the clock of the i2c peripheral using the APB1 Register
  *
- * @param[in]         -
- * @param[in]         -
+ * @param[in]         - The regdef structure which containns the i2c base addresses
+ * @param[in]         - Enable or disable control for 
  * @param[in]         -
  *
  * @return            -
@@ -164,9 +164,16 @@ void I2C_PeriClockControl(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
 	}
 	else
 	{
-		//TODO
+		if (pI2Cx == I2C1){
+			I2C1_PCLK_DI();
+		}
+		else if ( pI2Cx == I2C2){
+			I2C2_PCLK_DI();
+		}
+		else if (pI2Cx == I2C3){
+			I2C3_PCLK_DI();
+		}
 	}
-
 }
 
 
@@ -175,7 +182,7 @@ void I2C_PeriClockControl(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
 /*********************************************************************
  * @fn      		  - I2C_Init
  *
- * @brief             -
+ * @brief             - This function is used to initializs the I2C Peripheral with the neccesary bit fields like 
  *
  * @param[in]         -
  * @param[in]         -
